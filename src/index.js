@@ -27,14 +27,12 @@ function render({ result = [0] }) {
   function isCalculateDone() {
     return result.slice(-1)[0] === '=';
   }
-  function getLastNumber() {
-    let index = 0;
-    result.forEach((element, i) => {
-      if (Number.isInteger(element)) {
-        index = i;
-      }
-    });
-    return index;
+  function getDisplayNumber() {
+    const newResult = [...result].reverse();
+    if (!Number.isInteger(newResult[0])) {
+      return newResult[1];
+    }
+    return newResult[0];
   }
   function numberStream(newResult, number) {
     if (isNumberLast()) {
@@ -96,12 +94,26 @@ function render({ result = [0] }) {
   const element = (
     <div>
       <p>간단 계산기</p>
-      <p>{result[getLastNumber()]}</p>
+      <p>{getDisplayNumber()}</p>
       <p>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((i) => <button type="button" onClick={() => onNumberClick(i)}>{i}</button>)}
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((i) => (
+          <button
+            type="button"
+            onClick={() => onNumberClick(i)}
+          >
+            {i}
+          </button>
+        ))}
       </p>
       <p>
-        {['+', '-', '*', '/', '='].map((sign) => <button type="button" onClick={() => onSignClick(sign)}>{sign}</button>)}
+        {['+', '-', '*', '/', '='].map((sign) => (
+          <button
+            type="button"
+            onClick={() => onSignClick(sign)}
+          >
+            {sign}
+          </button>
+        ))}
       </p>
     </div>
   );
